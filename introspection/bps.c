@@ -9,12 +9,8 @@
 #include <ctype.h>
 #include <sysexits.h>
 
-#include "libbpf.h"
-
-// TODO: Remove this when CentOS 6 support is not needed anymore
-#ifndef CLOCK_BOOTTIME
-#define CLOCK_BOOTTIME 7
-#endif
+#include <bpf/bpf.h>
+#include <bpf/libbpf.h>
 
 static const char * const prog_type_strings[] = {
   [BPF_PROG_TYPE_UNSPEC] = "unspec",
@@ -78,7 +74,7 @@ static const char * const map_type_strings[] = {
   [BPF_MAP_TYPE_STRUCT_OPS] = "struct_ops",
   [BPF_MAP_TYPE_RINGBUF] = "ringbuf",
   [BPF_MAP_TYPE_INODE_STORAGE] = "inode_storage",
-  [BPF_MAP_TYPE_TASK_STORAGE] = "task_storage",
+  //[BPF_MAP_TYPE_TASK_STORAGE] = "task_storage",
 };
 
 #define ARRAY_SIZE(x) (sizeof(x) / sizeof(*(x)))
@@ -227,7 +223,7 @@ static int print_one_prog(uint32_t prog_id)
     map_ids = u64_to_ptr(prog_info.map_ids);
     prog_info.nr_map_ids = nr_map_ids;
     info_len = sizeof(prog_info);
-    ret = bpf_obj_get_info(prog_fd, &prog_info, &info_len);
+    ret = bpf_obj_get_info_by_fd(prog_fd, &prog_info, &info_len);
     if (ret) {
       fprintf(stderr, "Cannot get info for BID:%u. %s(%d)\n",
               prog_id, strerror(errno), errno);
@@ -267,7 +263,7 @@ static int print_one_prog(uint32_t prog_id)
       break;
     }
 
-    ret = bpf_obj_get_info(map_fd, &map_info, &info_len);
+    ret = bpf_obj_get_info_by_fd(map_fd, &map_info, &info_len);
     close(map_fd);
     if (ret) {
       fprintf(stderr, "Cannot get info for map:%u. %s(%d)\n",
@@ -304,7 +300,7 @@ int print_all_progs(void)
       return 1;
     }
 
-    ret = bpf_obj_get_info(prog_fd, &prog_info, &prog_info_len);
+    ret = bpf_obj_get_info_by_fd(prog_fd, &prog_info, &prog_info_len);
     close(prog_fd);
     if (ret) {
       fprintf(stderr,
