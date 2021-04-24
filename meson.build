@@ -71,14 +71,14 @@ foreach tool: tools
   bpfobj = static_library(
     tool + '.bpf',
     [
-      tool + '.bpf.c',
+      'libbpf-tools/' + tool + '.bpf.c',
       vmlinux,
     ],
     c_args: [
       '-target', 'bpf',
       '-D__TARGET_ARCH_x86',
     ],
-  ).extract_objects(tool + '.bpf.c')
+  ).extract_objects('libbpf-tools/' + tool + '.bpf.c')
   stripped = custom_target(
     tool + '.bpf.o',
     input: bpfobj,
@@ -104,15 +104,24 @@ foreach tool: tools
   executable(
     tool,
     [
-      tool + '.c',
+      'libbpf-tools/' + tool + '.c',
       skel,
-      'trace_helpers.c',
-      'syscall_helpers.c',
-      'errno_helpers.c',
-      'map_helpers.c',
-      'uprobe_helpers.c',
+      'libbpf-tools/trace_helpers.c',
+      'libbpf-tools/syscall_helpers.c',
+      'libbpf-tools/errno_helpers.c',
+      'libbpf-tools/map_helpers.c',
+      'libbpf-tools/uprobe_helpers.c',
     ],
     dependencies: deps,
     install: true,
   )
 endforeach
+
+executable(
+  'bps',
+  [
+    'libbpf-tools/bps.c',
+  ],
+  dependencies: deps,
+  install: true,
+)
