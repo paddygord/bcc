@@ -20,11 +20,11 @@ add_global_arguments(
 )
 
 tools = [
-  #'biolatency',
+  'biolatency',
   'biopattern',
-  #'biosnoop',
+  'biosnoop',
   'biostacks',
-  #'bitesize',
+  'bitesize',
   'cachestat',
   'cpudist',
   'cpufreq',
