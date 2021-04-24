@@ -47,6 +47,12 @@ tools = [
   'tcpconnlat',
   'vfsstat',
   'xfsslower',
+
+  'bootstrap',
+  'minimal',
+  'fentry',
+  'kprobe',
+  'uprobe',
 ]
 
 strip = find_program('llvm-strip')
