@@ -4,7 +4,7 @@ project(
   default_options: [
     'prefix=' + join_paths(meson.source_root(), 'packaged'),
     'buildtype=debugoptimized',
-    'warninglevel=3',
+    'warning_level=2',
     'werror=true',
     'c_std=gnu17',
   ]
@@ -13,6 +13,9 @@ project(
 add_global_arguments(
   '-Wno-unused-variable',
   '-Wno-unused-function',
+  '-Wno-unused-parameter',
+  '-Wno-sign-compare',
+  '-Wno-missing-field-initializers',
   language: 'c'
 )
 
@@ -55,8 +58,6 @@ deps = [
   dependency('zlib'),
 ]
 
-ARCH='x86'
-
 vmlinux = custom_target(
   'vmlinux',
   output: 'vmlinux.h',
@@ -75,7 +76,7 @@ foreach tool: tools
     ],
     c_args: [
       '-target', 'bpf',
-      '-D__TARGET_ARCH_' + ARCH,
+      '-D__TARGET_ARCH_x86',
     ],
   ).extract_objects(tool + '.bpf.c')
   stripped = custom_target(

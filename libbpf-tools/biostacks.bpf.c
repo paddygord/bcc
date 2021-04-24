@@ -39,7 +39,7 @@ static struct hist zero;
 static __always_inline
 int trace_start(void *ctx, struct request *rq, bool merge_bio)
 {
-	struct internal_rqinfo *i_rqinfop = NULL, i_rqinfo = {};
+	struct internal_rqinfo *i_rqinfop = 0, i_rqinfo = {};
 	struct gendisk *disk = BPF_CORE_READ(rq, rq_disk);
 	dev_t dev;
 
