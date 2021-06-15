@@ -58,6 +58,10 @@ tools = [
 strip = find_program('llvm-strip')
 bpftool = find_program('bpftool')
 
+if meson.get_compiler('c').get_id() != 'clang'
+  error('only clang supports -target bpf currently, please run meson with CC=clang')
+endif
+
 deps = [
   dependency('libbpf'),
   dependency('libelf'),
