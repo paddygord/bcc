@@ -126,12 +126,3 @@ foreach tool: tools
     install: true,
   )
 endforeach
-
-executable(
-  'bps',
-  [
-    'libbpf-tools/bps.c',
-  ],
-  dependencies: deps,
-  install: true,
-)
